@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+    - '11'
+install:
+  - npm install
+script:
+  - npm run build
+after_script:
+  - cd ./dist
+  - git init
+  - git config user.name "MarkSong8024"
+  - git config user.email "550907294@qq.com"
+  - git add -A
+  - git commit -m "Update documents"
+  - git push --force  "https://${GH_TOKEN}@github.com/MarkSong8024/myBlog.git" master:gh-pages
+branches:
+  only:
+    - master
