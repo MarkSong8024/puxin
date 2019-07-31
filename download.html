@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+  <script src="https://resource.puxinwangxiao.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<script>
+  var loadInfo=parent.loadInfo;
+  var btn;
+  if(loadInfo.downloadBtnNum == 2){
+    btn = parent.document.querySelector("#export-btn2").lastElementChild;
+  }else{
+    btn=parent.document.querySelector("#export-btn").lastElementChild;
+  }
+ 
+ btn.textContent='导出中...'
+  
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST',loadInfo.url,true);
+  xhr.setRequestHeader('authorization',loadInfo.token);
+  xhr.setRequestHeader("Content-Type","application/json");
+  xhr.responseType = "blob";  // 返回类型blob
+  // 定义请求完成的处理函数
+  xhr.onload = function () {
+    // 请求完成
+    if (this.status === 200) {
+      var blob = this.response;
+      var reader = new FileReader();
+      reader.readAsDataURL(blob);  // 转换为base64，可以直接放入a表情href
+      reader.onload = function (e) {
+        if(loadInfo.downloadBtnNum == 2){
+          btn.textContent='导出评分列表'
+        }else{
+          btn.textContent='导出表'
+        }
+        var a = document.createElement('a');
+        a.download =loadInfo.fileName;
+        a.href = e.target.result;
+        $("body").append(a);  // 修复firefox中无法触发click
+        a.click();
+        $(a).remove();
+      }
+    }
+    else{
+      btn.textContent='导出表'
+      alert("下载失败");
+    }
+  };
+  // 发送ajax请求
+  xhr.send(JSON.stringify(loadInfo.data));
+</script>
+</body>
+</html>
