@@ -8,15 +8,16 @@
       <div class="calendar-left">
         <el-calendar :range="currentDate">
           <template slot="dateCell" slot-scope="{date, data}">
+            {{setYearMonth(data)}}
             <p :class="data.isSelected ? 'is-selected' : ''">{{ data.day.split('-')[2]}}</p>
           </template>
         </el-calendar>
       </div>
       <div class="calendar-right">
         <div class="c-r-left">
-          <span class="el-icon-arrow-left"></span>
-          <span>2019年8月</span>
-          <span class="el-icon-arrow-right"></span>
+          <span class="el-icon-arrow-left" @click="changeMonth('prev')"></span>
+          <span class="year-no-select">{{yearMonth}}</span>
+          <span class="el-icon-arrow-right" @click="changeMonth('last')"></span>
         </div>
         <div class="c-r-right" @click="showCurrentDate">
           <span>{{isOpen? '收起': '展开'}}日历</span>
@@ -28,17 +29,28 @@
 </template>
 
 <script>
-import { getWeekDate } from "../../utils/filter";
+import { getWeekDate, filTime } from "../../utils/filter";
 import moment from "moment";
 export default {
   data() {
     return {
       isOpen: false, // 日历是否打开
-      newDate: moment().format("YYYY-MM-DD"),
-      currentDate: getWeekDate(new Date()) // 获取本周时间
+      newDate: moment().format("YYYY-MM-DD"), // 当前时间
+      currentDate: getWeekDate(new Date()), // 获取本周时间
+      yearMonth: "", // xxxx年xx月
+      selectedDay: "" // 选中的日期
     };
   },
   methods: {
+    /**
+     * 设置年月
+     */
+    setYearMonth(data) {
+      if (data.isSelected) {
+        this.selectedDay = data.day;
+        this.yearMonth = filTime(new Date(data.day).getTime(), "yy-mm", "1");
+      }
+    },
     /**
      * 展示具体日期
      */
@@ -68,16 +80,29 @@ export default {
       let month = data.split("-")[1];
       // 月开始时间
       month = parseInt(month, 10) - 1;
-      const startDate = moment()
+      const startDate = moment(data)
         .month(month)
         .startOf("month")
         .format("YYYY-MM-DD");
       // 月结束时间
-      const endDate = moment()
+      const endDate = moment(data)
         .month(month)
         .endOf("month")
         .format("YYYY-MM-DD");
       return [startDate, endDate];
+    },
+    /**
+     * 切换月份
+     */
+    changeMonth(type) {
+      let data = moment(this.selectedDay)
+        [type === "prev" ? "subtract" : "add"](1, "months")
+        .format("YYYY-MM-DD");
+      const dataList = this.getMonthStartEnd(data);
+      this.currentDate = this.isOpen
+        ? dataList
+        : getWeekDate(new Date(dataList[0]));
+      this.$children[0].selectedDay = dataList[0];
     },
     /**
      * 重写日期头部
@@ -124,6 +149,19 @@ export default {
       width: 25%;
       padding-top: 12px;
       display: flex;
+      .c-r-left {
+        .el-icon-arrow-left,
+        .el-icon-arrow-right {
+          cursor: pointer;
+          user-select: none;
+        }
+        .year-no-select {
+          font-size: 20px;
+          font-weight: 500;
+          color: #333333;
+          user-select: none;
+        }
+      }
       .c-r-right {
         cursor: pointer;
         position: absolute;
@@ -171,7 +209,7 @@ export default {
   border-bottom: none;
 }
 /deep/ .el-calendar__header {
-  // display: none;
+  display: none;
 }
 </style>
 

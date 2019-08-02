@@ -3,7 +3,7 @@
     <div class="login-box">
       <div class="login-top">
         <img src="../../../static/images/logo.png" alt />
-        <div>
+        <div class="d-title">
           <span class="top-title">致力于培养好每一个孩子</span>
         </div>
       </div>
@@ -279,10 +279,13 @@ export default {
       width: 192px;
       height: 36px;
     }
+    .d-title {
+      margin-top: 5px;
+    }
     .top-title {
       color: #33333;
       font-size: 16px;
-      margin-top: 12px;
+      margin-top: 15px;
       font-weight: 400;
     }
   }
