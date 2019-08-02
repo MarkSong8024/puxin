@@ -97,9 +97,25 @@ export const filTime = (val, type, isMilliSecond) => {
         return h + ':' + mm;
       case 'week':
         return arr[week];
+      case "YY-MM-DD":   //返回 年 月 日
+        return y + '-' + m + '-' + d;
       default:
         return time
     }
     return val;
   }
+}
+
+export const getWeekDate = (time) => {
+  let new_Date = time || new Date();
+  let timesStamp = new_Date.getTime();
+  let currenDay = new_Date.getDay();
+  let dates = [];
+  for (let i = 0; i < 7; i++) {
+    const data = new Date(timesStamp + 24 * 60 * 60 * 1000 * (i - (currenDay + 6) % 7)).toLocaleDateString();
+    const reg = /([0-9]+)\/([0-9]+)\/([0-9]+)/g;
+    dates.push(data.replace(reg, '$1-$2-$3'));
+  }
+  let [first, , , , , , last] = dates;
+  return [first, last];
 }

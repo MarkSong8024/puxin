@@ -7,78 +7,82 @@
         </li>
       </ul>
     </div>
-    <div class="c-content">
-      <ul class="c-list">
-        <li v-for="(item, index) in courseList" :key="index" @click="goDetail(item)">
-          <StudyList :item="item"></StudyList>
-          <!-- <div class="li-left">
-              <div class="li-l-top">
-                <span class="li-l-season">{{item.quarter_mode | filterQuarter}}</span>
-                <span class="li-l-subject">{{item.subject_mode | filterSub}}</span>
-                <span class="li-l-text">{{item.course_name}}</span>
-              </div>
-              <div class="li-l-bottom">
-                <span>
-                  <em>
-                    <img src="/static/images/icon_time.png" alt />
-                  </em>
-                </span>
-                <span class="data">{{item.day_str}}</span>
-                <span
-                  class="week"
-                >每周{{item.start_time ? item.start_time : item.class_start_time | filTime('week')}} {{item.last_time ? item.last_time : item.hour_str}}</span>
-                <i>|</i>
-                <span>共{{item.course_times_num}}课次</span>
-              </div>
-            </div>
-            <div class="li-right">
-              <div class="li-r-box">
-                <div class="img-box">
-                  <img :src="item.teacher_img | filtImg('teacher')" alt="朴新好老师" />
+    <div id="loadingBox" v-loading="loading">
+      <div class="c-content">
+        <ul class="c-list">
+          <li v-for="(item, index) in courseList" :key="index" @click="goDetail(item)">
+            <StudyList :item="item"></StudyList>
+            <!-- <div class="li-left">
+                <div class="li-l-top">
+                  <span class="li-l-season">{{item.quarter_mode | filterQuarter}}</span>
+                  <span class="li-l-subject">{{item.subject_mode | filterSub}}</span>
+                  <span class="li-l-text">{{item.course_name}}</span>
                 </div>
-                <div class="li-r-title">
-                  <div class="title1">{{item.teacher_name}}</div>
-                  <div class="title2">主讲老师</div>
+                <div class="li-l-bottom">
+                  <span>
+                    <em>
+                      <img src="/static/images/icon_time.png" alt />
+                    </em>
+                  </span>
+                  <span class="data">{{item.day_str}}</span>
+                  <span
+                    class="week"
+                  >每周{{item.start_time ? item.start_time : item.class_start_time | filTime('week')}} {{item.last_time ? item.last_time : item.hour_str}}</span>
+                  <i>|</i>
+                  <span>共{{item.course_times_num}}课次</span>
                 </div>
               </div>
-              <div class="li-r-box">
-                <div class="img-box">
-                  <img :src="item.assistant_img | filtImg('assistant')" alt="朴新好老师" />
+              <div class="li-right">
+                <div class="li-r-box">
+                  <div class="img-box">
+                    <img :src="item.teacher_img | filtImg('teacher')" alt="朴新好老师" />
+                  </div>
+                  <div class="li-r-title">
+                    <div class="title1">{{item.teacher_name}}</div>
+                    <div class="title2">主讲老师</div>
+                  </div>
                 </div>
-                <div class="li-r-title">
-                  <div class="title1">{{item.assistant_name}}</div>
-                  <div class="title2">辅导老师</div>
+                <div class="li-r-box">
+                  <div class="img-box">
+                    <img :src="item.assistant_img | filtImg('assistant')" alt="朴新好老师" />
+                  </div>
+                  <div class="li-r-title">
+                    <div class="title1">{{item.assistant_name}}</div>
+                    <div class="title2">辅导老师</div>
+                  </div>
                 </div>
-              </div>
-          </div>-->
-        </li>
-      </ul>
-      <!-- 无数据 -->
-      <div class="no-data" v-if="courseList.length === 0 && noData">
-        <img src="../../../static/images/no-data.png" />
-        <div>
-          <span>暂无课程 敬请期待</span>
+            </div>-->
+          </li>
+        </ul>
+        <!-- 无数据 -->
+        <div class="no-data" v-if="noData">
+          <img src="../../../static/images/no-data.png" />
+          <div class="no-public-class-box">
+            <span class="no-public-class-title">暂无课程 敬请期待</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="c-bottom" v-if="total>0">
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        @current-change="changePage"
-        :current-page="parseInt(params.page_num, 10)"
-        :total="total"
-      ></el-pagination>
+      <div class="c-bottom" v-if="total>0">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          @current-change="changePage"
+          :current-page="parseInt(params.page_num, 10)"
+          :total="total"
+        ></el-pagination>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import { getCourseList } from "api/study";
 import StudyList from "../../components/studyCenter/StudyList";
+import { Loading } from "element-ui";
 export default {
   components: { StudyList },
   data() {
     return {
+      loading: false,
       noData: false,
       tabs: [
         {
@@ -114,25 +118,36 @@ export default {
   },
   methods: {
     getCourseList(type) {
+      this.loading = true;
       // type 1开课中； 0未开课；2已结课
       getCourseList({
         data: type,
         success: res => {
           if (res.data) {
             window.scrollTo(0, 0);
-            let data = res.data;
-            this.courseList = data.list;
-            this.total = parseInt(data.total, 10);
+            setTimeout(() => {
+              let data = res.data;
+              this.courseList = data.list;
+              this.total = parseInt(data.total, 10);
+              this.noData = this.courseList.length === 0;
+              this.loading = false;
+            }, 500);
           } else {
+            this.loading = false;
             this.$alert(res.message || "网络异常", "提示", {
               confirmButtonText: "确定"
             });
           }
         },
         error: err => {
+          this.loading = false;
           console.log("失败", err);
         }
       });
+      // 关闭loading
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     },
     // 切换页码
     changePage(val) {
@@ -154,11 +169,6 @@ export default {
         path: "/study_center/my_course_detail",
         query: params
       });
-    }
-  },
-  watch: {
-    courseList(newVal) {
-      this.noData = newVal.length === 0;
     }
   }
 };
@@ -226,6 +236,13 @@ export default {
       img {
         margin-top: calc(~"50vh - 140px");
         width: 208px;
+      }
+      .no-public-class-box {
+        margin-top: 10px;
+        .no-public-class-title {
+          color: #333333;
+          margin-left: 20px;
+        }
       }
     }
   }

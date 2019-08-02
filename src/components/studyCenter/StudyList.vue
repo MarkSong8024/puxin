@@ -70,19 +70,17 @@ export default {
 .li-left {
   text-align: left;
   min-width: 350px;
-  // margin-right: 299px;
   .li-l-top {
     height: 17px;
     font-size: 18px;
     font-weight: 400;
     margin-bottom: 19px;
     color: rgba(51, 51, 51, 1);
+    display: flex;
     .li-l-season,
     .li-l-subject {
-      vertical-align: middle;
       width: 20px;
       height: 20px;
-      line-height: 20px;
       background: #00a4ff;
       border-radius: 2px;
       color: #ffffff;
@@ -91,6 +89,9 @@ export default {
       display: inline-block;
       text-align: center;
     }
+    .li-l-season {
+      margin-right: 6px;
+    }
     .li-l-subject {
       width: 18px;
       height: 18px;
@@ -98,6 +99,11 @@ export default {
       background: #fff;
       color: #00a4ff;
       border: 1px solid #00a4ff;
+      font-family: PingFangSC-Regular;
+    }
+    .li-l-text {
+      margin-top: -3px;
+      margin-left: 12px;
     }
   }
   .li-l-bottom {

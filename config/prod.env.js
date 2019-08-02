@@ -10,7 +10,7 @@ const time=date.getMonth()+"_"+date.getDate();
 const config= {
   NODE_ENV: '"production"',
   ENV_CONFIG: '"prod"',
-  BASE_API:'""'
+  BASE_API:'"https://www.puxinwangxiao.com"'
 }
 target=='build-test'?config.BASE_API=develop:config.BASE_API=build
 console.log("打包接口地址:",config.BASE_API);

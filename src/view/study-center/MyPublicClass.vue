@@ -7,28 +7,30 @@
         </li>
       </ul>
     </div>
-    <div class="c-content">
-      <ul class="c-list">
-        <li v-for="(item, index) in publicCourseList" :key="index">
-          <PublicClassList :item="item" :params="params"></PublicClassList>
-        </li>
-      </ul>
-      <!-- 暂无数据 -->
-      <div class="no-data" v-if="publicCourseList.length === 0 && noData">
-        <img src="../../../static/images/no-data.png" />
-        <div>
-          <span>暂无公开课 敬请期待</span>
+    <div v-loading="loading">
+      <div class="c-content">
+        <ul class="c-list">
+          <li v-for="(item, index) in publicCourseList" :key="index">
+            <PublicClassList :item="item" :params="params"></PublicClassList>
+          </li>
+        </ul>
+        <!-- 暂无数据 -->
+        <div class="no-data" v-if="noData">
+          <img src="../../../static/images/no-data.png" />
+          <div class="no-public-class-box">
+            <span class="no-public-class-title">暂无公开课 敬请期待</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="c-bottom" v-if="total>0">
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        @current-change="changePage"
-        :current-page="parseInt(params.page_num, 10)"
-        :total="total"
-      ></el-pagination>
+      <div class="c-bottom" v-if="total>0">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          @current-change="changePage"
+          :current-page="parseInt(params.page_num, 10)"
+          :total="total"
+        ></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +41,7 @@ export default {
   components: { PublicClassList },
   data() {
     return {
+      loading: false,
       noData: false,
       tabs: [
         {
@@ -71,16 +74,21 @@ export default {
   methods: {
     // 获取数据
     getPublicClass(data) {
+      this.loading = true;
       getPublicClass({
         data: data,
         success: res => {
-          let data = res.data;
-          this.publicCourseList = data.course_list;
-          this.total = parseInt(data.page.total, 10);
           window.scrollTo(0, 0);
+          setTimeout(() => {
+            let data = res.data;
+            this.total = parseInt(data.page.total, 10);
+            this.publicCourseList = data.course_list;
+            this.noData = this.publicCourseList.length === 0;
+            this.loading = false;
+          }, 500);
         },
         error: err => {
-          console.log("失败", err);
+          this.loading = false;
         }
       });
     },
@@ -97,11 +105,6 @@ export default {
       this.params.page_num = "1";
       this.params.type = type;
       this.getPublicClass(this.params);
-    }
-  },
-  watch: {
-    publicCourseList(newVal) {
-      this.noData = newVal.length === 0;
     }
   }
 };
@@ -154,9 +157,6 @@ export default {
         border-radius: 3px;
         margin-bottom: 30px;
         padding: 36px;
-        &:hover {
-          box-shadow: 0 1px 23px 1px rgba(45, 117, 212, 0.13);
-        }
       }
     }
     .no-data {
@@ -164,6 +164,13 @@ export default {
       img {
         margin-top: calc(~"50vh - 140px");
         width: 208px;
+      }
+      .no-public-class-box {
+        margin-top: 10px;
+        .no-public-class-title {
+          color: #333333;
+          margin-left: 20px;
+        }
       }
     }
   }

@@ -10,7 +10,12 @@
       <div class="info-list">
         <ul>
           <li v-for="(item, index) in detailsList" :key="index">
-            <div v-for="(childItem, childIndex) in item.info" :key="childIndex" class="li-info-box">
+            <div
+              v-for="(childItem, childIndex) in item.info"
+              :key="childIndex"
+              class="li-info-box"
+              :class="{'in-fo-box-list': (item.info && item.info.length > 1 && childIndex !== item.info.length - 1)}"
+            >
               <div class="li-left">
                 <div class="li-l-top">
                   <span>第{{index+1}}讲：{{childItem.chapter_name}}</span>
@@ -82,14 +87,16 @@ export default {
         data: { class_id: this.data.class_id },
         success: res => {
           if (res.data) {
-            let data = res.data;
-            this.detailsList = data.chapter_list;
-            this.loading = false;
+            setTimeout(() => {
+              let data = res.data;
+              this.detailsList = data.chapter_list;
+              this.loading = false;
+            }, 500);
           }
         },
         error: err => {
-          console.log("失败", err);
           this.loading = false;
+          console.log("失败", err);
         }
       });
     },
@@ -170,16 +177,14 @@ export default {
         list-style: none;
         li {
           min-width: 550px;
-          padding: 33px;
+          padding: 28px;
           min-height: 53px;
           box-shadow: 0px 0px 10px 0px rgba(236, 236, 238, 0.7);
           border-radius: 3px;
           margin-bottom: 30px;
-          &:hover {
-            box-shadow: 0 1px 23px 1px rgba(45, 117, 212, 0.13);
-          }
           .li-info-box {
             display: flex;
+            margin-bottom: 10px;
             justify-content: space-between;
             .li-left {
               min-width: 350px;
@@ -208,7 +213,7 @@ export default {
                 text-align: center;
                 width: 146px;
                 height: 36px;
-                line-height: 36px;
+                line-height: 40px;
                 background: rgba(0, 164, 255, 1);
                 border-radius: 25px;
                 color: #ffffff;
@@ -224,6 +229,9 @@ export default {
                 background: #cccccc;
               }
             }
+          }
+          .in-fo-box-list {
+            margin-bottom: 20px;
           }
         }
       }

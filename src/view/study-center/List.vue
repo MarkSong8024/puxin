@@ -9,7 +9,9 @@
         </div>
       </div>
       <div class="head">
-        <img :src="u.avatar || defalutUrl" alt="个人头像" />
+        <div class="head-border">
+          <img :src="u.avatar || defalutUrl" alt="个人头像" />
+        </div>
       </div>
       <div class="h-info">
         <div class="h-info-top">
@@ -28,7 +30,7 @@
             :class="{'check':active == item.id}"
             @click="go(item)"
           >
-            <img :src="item.src" alt />
+            <img :class="item.class" :src="item.src" alt />
             <span>{{item.name}}</span>
           </li>
         </ul>
@@ -72,13 +74,15 @@ export default {
           id: 2,
           name: "我的课程",
           path: "/study_center/my_course",
-          src: "../../../static/images/my-class.png"
+          src: "../../../static/images/my-class.png",
+          class: "vertical"
         },
         {
           id: 3,
           name: "我的公开课",
           path: "/study_center/my_public_class",
-          src: "../../../static/images/my-public-class.png"
+          src: "../../../static/images/my-public-class.png",
+          class: "across"
         }
       ],
       dateTime: new Date().getTime(),
@@ -150,11 +154,19 @@ export default {
     }
   }
   .head {
-    margin: 60px auto 20px auto;
-    img {
-      width: 107px;
-      height: 107px;
+    margin: 60px auto 47px auto;
+    .head-border {
+      width: 105px;
+      height: 105px;
       border-radius: 50%;
+      background: #afbcdf;
+      margin: 0 auto;
+      img {
+        margin-top: 5px;
+        width: 95px;
+        height: 95px;
+        border-radius: 50%;
+      }
     }
   }
   .h-info {
@@ -206,8 +218,16 @@ export default {
         img {
           height: 20px;
           width: 22px;
-          margin-right: 18px;
+          margin-right: 14px;
           vertical-align: sub;
+          &.vertical {
+            width: 18px;
+            height: 21px;
+          }
+          &.across {
+            width: 20px;
+            height: 21px;
+          }
         }
       }
     }
@@ -220,9 +240,9 @@ export default {
     user-select: none;
     text-align: left;
     img {
-      height: 24px;
-      width: 22px;
-      margin-right: 18px;
+      width: 19px;
+      height: 21px;
+      margin-right: 14px;
       vertical-align: sub;
     }
     span {

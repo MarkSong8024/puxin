@@ -48,4 +48,10 @@ body {
   text-align: center;
   /* color: #2c3e50; */
 }
+.el-loading-mask {
+  background-color: #ffffff !important;
+}
+.el-loading-mask .el-loading-spinner {
+  top: 100px !important;
+}
 </style>
