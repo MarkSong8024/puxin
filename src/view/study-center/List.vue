@@ -64,12 +64,12 @@ export default {
       defalutUrl: "../../../static/images/default_avatar.png",
       active: 2,
       list: [
-        // {
-        //   id: 1,
-        //   name: "直播列表",
-        //   path: "",
-        //   src: "../../../static/images/live-list.png"
-        // },
+        {
+          id: 1,
+          name: "直播列表",
+          path: "/live/main",
+          src: "../../../static/images/live-list.png"
+        },
         {
           id: 2,
           name: "我的课程",

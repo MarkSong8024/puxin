@@ -45,6 +45,11 @@ export default new Router({
           meta: {
             id: 3
           }
+        },
+        {
+          path: '/live/main',
+          name: 'live_calss',
+          component: () => import('view/live/main')
         }
       ]
     },
@@ -56,10 +61,6 @@ export default new Router({
         aliasName: '我的课程看回放'
       },
       component: () => import('@/components/palyback/seehf.vue')
-    },
-    {
-      path: '/live/main',
-      component: () => import('view/live/main')
     },
     {
       path: '*',

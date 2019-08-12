@@ -102,6 +102,9 @@ export const filTime = (val, type, isMilliSecond) => {
       case "yy-mm":
         return y + '年' + m + '月';
         break;
+      case "dd":
+        return d;
+        break;  
       default:
         return time
     }
