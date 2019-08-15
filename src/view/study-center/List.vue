@@ -64,12 +64,12 @@ export default {
       defalutUrl: "../../../static/images/default_avatar.png",
       active: 2,
       list: [
-        {
-          id: 1,
-          name: "直播列表",
-          path: "/live/main",
-          src: "../../../static/images/live-list.png"
-        },
+        // {
+        //   id: 1,
+        //   name: "直播列表",
+        //   path: "/live/main",
+        //   src: "../../../static/images/live-list.png"
+        // },
         {
           id: 2,
           name: "我的课程",
@@ -200,6 +200,7 @@ export default {
         span {
           color: #dee7ff;
           font-size: 18px;
+          letter-spacing: 1px;
         }
         &.check {
           background: rgba(24, 42, 87, 1);
@@ -246,6 +247,7 @@ export default {
       vertical-align: sub;
     }
     span {
+      letter-spacing: 1px;
       font-size: 18px;
       color: #dee7ff;
     }

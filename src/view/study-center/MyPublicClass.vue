@@ -135,11 +135,12 @@ export default {
         cursor: pointer;
         margin-right: 40px;
         font-size: 16px;
-        color: #666666;
+        color: #333333;
         span {
+          letter-spacing: 1px;
           &.check {
             font-size: 20px;
-            color: #333333;
+            color: #00a4ff;
           }
         }
       }
