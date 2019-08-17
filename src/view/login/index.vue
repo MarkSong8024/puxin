@@ -56,7 +56,7 @@
           </el-form>
         </div>
         <div class="l-btn">
-          <button class="l-dl" @click="loginFn('loginForm')">登录</button>
+          <button class="l-dl" @click="loginFn('loginForm')">学生登录</button>
         </div>
       </div>
     </div>
