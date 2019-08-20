@@ -91,6 +91,7 @@ export default {
 }
 .fi-cotent {
   // height: calc(~"100% - 90px - 30px");
+  width: 100%;
   height: 100%;
 }
 .footer-box {
